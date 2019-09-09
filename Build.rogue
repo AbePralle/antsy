@@ -11,6 +11,8 @@
 #$ LIBRARIES(Linux) = libsdl1.2-dev(sdl)
 #$ LIBRARIES(macOS) = sdl
 #$ LIBRARIES = cmake
+#$ LIBRARIES = curl
+#$ LIBRARIES = xz
 
 # description()s are optional - Rogo uses introspection to determine which commands are available.
 # 'rogo help default' displays the description for "default", etc.
@@ -20,6 +22,18 @@ description( "help",    "Displays a list of all actions that can be performed by
 routine rogo_default
   if (not File.exists("libtmt"))
     execute @|git clone https://github.com/MurphyMc/libtmt
+  endIf
+
+  if (System.is_macos)
+    if (not File.exists("MacOSX10.13.sdk"))
+      if (not File.exists("MacOSX10.13.sdk.tar.xz"))
+        println "Downloading macOS10.13 SDK"
+        execute @|curl -L "https://github.com/phracker/MacOSX-SDKs/releases/download/10.13/MacOSX10.13.sdk.tar.xz" -o MacOSX10.13.sdk.tar.xz
+      endIf
+      execute @|xz -d MacOSX10.13.sdk.tar.xz
+      execute @|tar -xf MacOSX10.13.sdk.tar
+      File.delete( "MacOSX10.13.sdk.tar" )
+    endIf
   endIf
 
   if (File.exists("CMakeCache.txt"))

@@ -23,6 +23,9 @@ if (ANTSY_TITLE_SET)
   add_definitions(-DANTSY_TITLE_SET)
 endif ()
 
+set(CMAKE_OSX_DEPLOYMENT_TARGET "10.13")
+set(CMAKE_C_FLAGS "--sysroot ${CMAKE_CURRENT_SOURCE_DIR}/MacOSX10.13.sdk ${CMAKE_C_FLAGS}")
+
 project (antsy)
 add_executable(antsy
   antsy.c
